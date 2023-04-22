@@ -55,6 +55,18 @@
             "path": "USER/main.cpp"
           },
           {
+            "path": "USER/si446x_api.h"
+          },
+          {
+            "path": "USER/si446x_cmd_def.h"
+          },
+          {
+            "path": "USER/si446x_HAL.h"
+          },
+          {
+            "path": "USER/si446x_patch.h"
+          },
+          {
             "path": "USER/UC8581_driver.h"
           }
         ],
@@ -84,7 +96,7 @@
               "id": 1,
               "mem": {
                 "startAddr": "0x20000000",
-                "size": "0x4000"
+                "size": "0x5000"
               },
               "isChecked": true,
               "noInit": false
@@ -96,7 +108,7 @@
               "id": 1,
               "mem": {
                 "startAddr": "0x00000000",
-                "size": "0x20000"
+                "size": "0x10000"
               },
               "isChecked": true,
               "isStartup": true

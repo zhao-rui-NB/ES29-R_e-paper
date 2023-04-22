@@ -6,7 +6,8 @@
                 "${default}",
                 "${workspaceFolder}/Library/CMSIS/Include",
                 "${workspaceFolder}/Library/Device/Nuvoton/Nano100Series/Include",
-                "${workspaceFolder}/Library/StdDriver/inc"
+                "${workspaceFolder}/Library/StdDriver/inc",
+                "${workspaceFolder}/USER"
             ],
             "defines": [
                 "_DEBUG",
