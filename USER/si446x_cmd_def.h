@@ -8,6 +8,9 @@
 #define CMD_GET_PROPERTY                                    0x12
 #define CMD_GPIO_PIN_CFG                                    0x13
 #define CMD_FIFO_INFO                                       0x15
+
+#define CMD_GET_PACKET_INFO                                 0x16
+
 #define CMD_GET_INT_STATUS                                  0x20
 #define CMD_GET_PH_STATUS                                   0x21
 #define CMD_GET_MODEM_STATUS                                0x22

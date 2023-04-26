@@ -6,7 +6,7 @@
 
 #include "si446x_HAL_ctrl.h"
 
-#define DEBUG
+//#define DEBUG
 
 void get_part_info(si446x_reply_PART_INFO_map* reply){
     int reply_len = 8;
@@ -81,13 +81,26 @@ void get_int_status(si446x_reply_GET_INT_STATUS_map* reply){
 
 }
 
+void get_packet_info(si446x_reply_PACKET_INFO_map* reply){
+    si446x_reply_PACKET_INFO_map r;
+    if(reply==NULL){
+        reply = &r;
+    }
+    uint8_t buf[2];
+    uint8_t arg[] = {0,0,0,0,0};
+    si446x_HAL_ctrl_send_cmd(CMD_GET_PACKET_INFO,5,arg);
+    si446x_HAL_ctrl_get_reply(2,buf);
+    reply->LENGTH = buf[0]<<8 | buf[1];
+    printf("\npacket len : %d \n" , reply->LENGTH);
+}
+
 
 void write_tx_fifo(uint8_t size , uint8_t* ptr){
     //si444x_HAL_ctrl_wait_CTS();
     si446x_HAL_ctrl_send_cmd(CMD_WRITE_TX_FIFO,size,ptr);
 }
 void start_tx(uint8_t ch, uint8_t complete_state , uint8_t tx_len){
-    uint8_t arg[4];
+    uint8_t arg[6];
     arg[0] = ch;
     arg[1] = (STATE_READY<<4);
     arg[2] = tx_len>>8;

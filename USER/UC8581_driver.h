@@ -55,9 +55,11 @@ void UC8151_io_init(){
     SPI_EnableAutoSS(SPI2, SPI_SS0, SPI_SS0_ACTIVE_LOW);
 }
 
-
-void wait_busy(){
-    while (!BUSYn){}
+uint8_t UC8151_IS_busy(){
+    return !BUSYn;
+}
+void UC8151_wait_busy(){
+    while (UC8151_IS_busy()){}
 }
 void UC8151_write(uint8_t type , uint8_t payload){
     DCn = type;
@@ -83,7 +85,7 @@ void UC8151_init(){
 
     UC8151_write(UC8151_cmd ,0x04);//power on
     CLK_SysTickDelay(100);
-    wait_busy();
+    UC8151_wait_busy();
 
     UC8151_write(UC8151_cmd  , 0x00);//panel setting
     UC8151_write(UC8151_data , 0x0f);//default data
@@ -106,12 +108,12 @@ void UC8151_init(){
     //UC8151_write(UC8151_data , 0x0F);
 }
 
-void UC8151_send_frame(const uint8_t* black_img ,const uint8_t* red_img){
+void UC8151_send_frame(/*const*/ uint8_t* black_img ,/*const*/ uint8_t* red_img){
     UC8151_write(UC8151_cmd,0x10);//start send black/white
     for(int y=0 ; y<EPD_HEIGHT ; y++){
-        for(int x=0 ; x<EPD_WIDTH ; x++){
+        for(int x=0 ; x<EPD_WIDTH/8 ; x++){
             if(black_img)
-                UC8151_write(UC8151_data , black_img[ y*EPD_WIDTH + x]);
+                UC8151_write(UC8151_data , black_img[ y*EPD_WIDTH/8 + x]);
             else
                 UC8151_write(UC8151_data , 0xFF);
         }
@@ -119,9 +121,9 @@ void UC8151_send_frame(const uint8_t* black_img ,const uint8_t* red_img){
 
     UC8151_write(UC8151_cmd , 0x13);//start send red
     for(int y=0 ; y<EPD_HEIGHT ; y++){
-        for(int x=0 ; x<EPD_WIDTH ; x++){
+        for(int x=0 ; x<EPD_WIDTH/8 ; x++){
             if(red_img)
-                UC8151_write(UC8151_data , red_img[ y*EPD_WIDTH + x] );
+                UC8151_write(UC8151_data , red_img[ y*EPD_WIDTH/8 + x] );
             else
                 UC8151_write(UC8151_data , 0x00);
         }
@@ -130,7 +132,6 @@ void UC8151_send_frame(const uint8_t* black_img ,const uint8_t* red_img){
     //wait_busy();  
 }
     
-
 
 
 

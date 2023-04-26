@@ -28,6 +28,9 @@
             "path": "Library/StdDriver/src/clk.c"
           },
           {
+            "path": "Library/StdDriver/src/fmc.c"
+          },
+          {
             "path": "Library/StdDriver/src/gpio.c"
           },
           {

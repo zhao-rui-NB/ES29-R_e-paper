@@ -4,6 +4,12 @@
 #include "si446x_api.h"
 //#include <sys.h>
 
+#include "RX_device.h"
+#include "TX_device.h"
+
+#define RX_DEV
+//#define TX_DEV
+
 void SYS_Init(void){
     SYS_UnlockReg();
 
@@ -42,7 +48,7 @@ void SYS_Init(void){
     //set spi0 pin //for si4460
     SYS->PC_L_MFP &= ~(SYS_PC_L_MFP_PC0_MFP_SPI0_SS0 | SYS_PC_L_MFP_PC1_MFP_SPI0_SCLK | SYS_PC_L_MFP_PC2_MFP_SPI0_MISO0 | SYS_PC_L_MFP_PC3_MFP_SPI0_MOSI0);
     SYS->PC_L_MFP |=   SYS_PC_L_MFP_PC0_MFP_SPI0_SS0 | SYS_PC_L_MFP_PC1_MFP_SPI0_SCLK | SYS_PC_L_MFP_PC2_MFP_SPI0_MISO0 | SYS_PC_L_MFP_PC3_MFP_SPI0_MOSI0 ;
-
+    
     SYS_LockReg();
 }
 
@@ -57,6 +63,9 @@ void delay_10_second(){
     }
 }
 
+
+
+
 int main(){
 		
     SYS_Init();
@@ -64,79 +73,21 @@ int main(){
 	
     printf("start si446x init\n");
     si446x_init();
-    printf("\n\nget_int_status !!\n");
     get_int_status(NULL);
     printf("init finish !! \n");
 
-    printf("get_int_status : \n");
-    get_int_status(NULL);
+    #ifdef TX_DEV 
+        tx_device_loop();
+    #endif
 
-#define RX_DEV
-//#define TX_DEV
-    //get_part_info(NULL);
-    //while(1){}
-    int send_cnt = 0; 
-#ifdef TX_DEV
-    while(1){
-
-        uint8_t data[] = "fuck you\n"; 
-
-        printf("\n\nstart send data %d\n" , send_cnt++);
-        get_int_status(NULL);
-        write_tx_fifo(7,data);
-        start_tx(0,NULL,7);
-
-        delay_10_second();
-
-
-    }
-#endif
-
-#ifdef RX_DEV
-    start_rx(0,7);
-    while(1){
-        if(si446x_HAL_IS_IRQ()){
-            uint8_t read_buf[64];
-            for(int i=0 ; i<64 ; i++)read_buf[i]=0x87;
-            get_int_status(NULL);
-            read_rx_fifo(20,read_buf);
-            read_buf[7] = '\0';
-            printf("received !! : %s\n" , read_buf);
-            for(int i=0 ; i<20 ; i++){
-                printf("0x%x , " , read_buf[i]);
-            }
-            printf("\n");
-        }
-        //CLK_SysTickDelay(300000);
-        //printf(".");
-    }
-#endif
-
-
-//    printf("init finish\n");
-//
-////get_init_status
-////write_tx_fifo
-////start_tx
-//
-//    uint8_t key[] = {0x8e,0xee,0x88,0x88,0x88,0x80};
-//
-//    while(1){
-//        get_init_status();
-//        write_tx_fifo(sizeof(key)/sizeof(uint8_t) , key);
-//        start_tx(0,0,sizeof(key)/sizeof(uint8_t));
-//        CLK_SysTickDelay(500000);
-//        printf("finish\n");
-//    }
-
-
-
-
-while (1)
-{
-    
+    #ifdef RX_DEV
+        rx_device_loop();
+    #endif
 }
 
+    
+    
+    
     /*
     UC8151_io_init();
     
@@ -161,4 +112,3 @@ while (1)
     }
     */
 
-}
