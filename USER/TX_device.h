@@ -38,7 +38,7 @@ void tx_device_loop(){
 
             if(ascii_cmd_received){
                 ascii_cmd_received = 0;
-                printf("st\n");
+                //printf("st\n");
                 //printf("\nstart send data");
                 //for(int i=0 ; ascii_cmd_buffer[i]!=NULL ; i++){
                 //    printf("%c" , ascii_cmd_buffer[i]);
@@ -86,9 +86,9 @@ void tx_device_loop(){
                 get_int_status(NULL);
                 write_tx_fifo(23,packet);
                 start_tx(0,NULL,23);
-                printf("wait TX :");
+                //printf("wait TX :");
                 while(!si446x_HAL_IS_IRQ());
-                printf("send finish\n");
+                printf("ok\n");
                 
             }
         }

@@ -15,16 +15,17 @@ reg_addr = 0
 ti = time.time()
 for i in range(296):
     data = ''
-    reg_addr = '{:04x}'.format(16*i+0x0000)
+    reg_addr = '{:04x}'.format(16*i+0x8000)
     for j in range(16):
-        data = data + '{:02x}'.format(  img[i*16+j])
-    print(UID + func + reg_addr + data + '\r\n')
+        data = data + '{:02x}'.format(  0xFF^img[i*16+j])
+    print(UID + func + reg_addr + data)
     packet = (UID + func + reg_addr + data + '\r\n').encode('utf-8')
     ser.write(packet)
     
     while True:
         line = ser.readline().decode()
-        if 'send finish' in line:
+        print(line)
+        if 'ok' in line:
             break
 
 
