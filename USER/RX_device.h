@@ -10,36 +10,6 @@ uint8_t frame_buffer_black[4740];
 uint8_t frame_buffer_red  [4740];
 
 
-//  void GPABC_IRQHandler(void)
-//  {   
-//      PA->ISRC = PA->ISRC;
-//      PB->ISRC = PB->ISRC;
-//      PC->ISRC = PC->ISRC;
-//      //printf("int\n\n");
-//      //return;
-//  //
-//  //
-//      //uint32_t reg;
-//      ///* To check if PB.5 interrupt occurred */
-//      //if (PB->ISRC & BIT8)
-//      //{
-//      //    PB->ISRC = BIT8;
-//      //    printf("PB.5 INT occurred. \n");
-//  //
-//      //}
-//      //else
-//      //{
-//      //    /* Un-expected interrupt. Just clear all PORTA, PORTB, PORTC interrupts */
-//      //    reg = PA->ISRC;
-//      //    PA->ISRC = reg;
-//      //    reg = PB->ISRC;
-//      //    PB->ISRC = reg;
-//      //    reg = PC->ISRC;
-//      //    PC->ISRC = reg;
-//      //    printf("Un-expected interrupts. \n");
-//      //}
-//  }
-
 void rx_device_loop(){
     
     //PB8 btn pin 
@@ -50,7 +20,7 @@ void rx_device_loop(){
     GPIO_SET_DEBOUNCE_TIME(GPIO_DBCLKSRC_HCLK, GPIO_DBCLKSEL_1);
     GPIO_ENABLE_DEBOUNCE(PB, BIT8);
 
-    while(1){}
+    
     //get uid[0]
     SYS_UnlockReg();
     FMC_Open();
@@ -65,13 +35,10 @@ void rx_device_loop(){
     UC8151_wait_busy();
     POWER_EN = POWER_OFF;
 
-
     uint8_t wait_for_power_off_epd = 0;
-
-
+    
     start_rx(0,23);
     while(1){
-        printf("pb8 : %d\n" , PB8);
         if(si446x_HAL_IS_IRQ()){
             uint8_t read_buf[23];
             get_int_status(NULL);

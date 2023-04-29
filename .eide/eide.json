@@ -55,6 +55,9 @@
             "path": "USER/img.h"
           },
           {
+            "path": "USER/IRQHandler.c"
+          },
+          {
             "path": "USER/main.cpp"
           },
           {
